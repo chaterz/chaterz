@@ -1,0 +1,19 @@
+{
+  "name": "chaterz-api",
+  "version": "1.0.0",
+  "description": "The Api of Chaterz",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaterz/chaterz.git"
+  },
+  "author": "chaterz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chaterz/chaterz/issues"
+  },
+  "homepage": "https://github.com/chaterz/chaterz#readme"
+}

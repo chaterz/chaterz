@@ -2,26 +2,26 @@
 
 ### * Sign Up :
 
-`/signup/email/username/password/`
+`/signup/`
 
-Replace **email** with the user email / **username** with the user name / **password** withe the user password.
+Post the key **email** with the user email as value / Post the key**username** with the user name as value / Post the key **password** withe the user password as value.
 
 ### * Log in
 
-`/login/username/password/`
+`/login/`
 
-Replace **username** with the user name / **password** with the user password.
+Post the key **username** with the user name as value / Post the key **password** with the user password as value.
 
 ### * Create Enterprise
 
-`/create/enterprise/name/author`
+`/create/enterprise/`
 
-Replace **name** with the neterprise name/ **author** with the user name of the user who wants to create this enterprise.
+Post the key **name** with the enterprise name as value / Post the key **author** with the user name of the user who wants to create this enterprise as value.
 
 ### * Create Channel
 
-`/create/channel/enterprise/name/author`
+`/create/channel/enterprise/`
 
-Replace **enterprise** with the enterprise name / **name** with the channel name / **author** with the user name of the user who wants to create this channel.
+Post the key **enterprise** with the enterprise name as value / Post the key **name** with the channel name as value / Post the key **author** with the user name of the user who wants to create this channel as value.
 
 ### * Create post (SOON)

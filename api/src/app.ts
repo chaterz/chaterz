@@ -1,7 +1,7 @@
 // import
-
 import express = require('express'); // using require because of error on vscode
 import * as mongoose from 'mongoose';
+import * as bodyParser from 'body-parser';
 
 // Mongoose Init
 mongoose.connect('mongodb://localhost:27017/chaterz');
@@ -66,6 +66,8 @@ const channelModel: mongoose.Model<any> = mongoose.model('channel', channelSchem
 
 // Express
 const app: any = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 interface User {
     email: string,
@@ -110,8 +112,8 @@ const getChannels = (enterprise_name: string, success: Function) => {
     });
 };
 
-app.get('/signup/:email/:username/:password/', (request: any, response: any) => {
-    const data: User = request.params;
+app.post('/signup/', (request: any, response: any) => {
+    const data: User = request.body;
     let users: any = getUsers((user_response: any) => {
         if(user_response.includes(data.username)) {
             const signedup: boolean = false;
@@ -130,8 +132,8 @@ app.get('/signup/:email/:username/:password/', (request: any, response: any) => 
     });
 });
 
-app.get('/login/:username/:password/', (request: any, response: any) => {
-    const data: User = request.params;
+app.post('/login/', (request: any, response: any) => {
+    const data: User = request.body;
     let users: any = getUsers((user_response: any) => {
         if(user_response.includes(data.username)) {
             userModel.find({ username: data.username }, (error: any, mongores: any,) => {
@@ -154,8 +156,8 @@ app.get('/login/:username/:password/', (request: any, response: any) => {
     });
 });
 
-app.get('/create/enterprise/:name/:author', (request: any, response: any) => {
-    const data = request.params;
+app.post('/create/enterprise/', (request: any, response: any) => {
+    const data: any = request.body;
     let enterprises: any = getEnterprises((enterprises_response: any) => {
         if(enterprises_response.includes(data.name)){
             const created: boolean = false;
@@ -181,8 +183,8 @@ app.get('/create/enterprise/:name/:author', (request: any, response: any) => {
     });
 });
 
-app.get('/create/channel/:enterprise/:name/:author', (request: any, response: any) => {
-    const data = request.params;
+app.post('/create/channel/', (request: any, response: any) => {
+    const data: any = request.body;
     let enterprises: any = getEnterprises((enterprises_response: any) => {
         if(enterprises_response.includes(data.enterprise)){
             let users = getUsers((users_response: any) => {

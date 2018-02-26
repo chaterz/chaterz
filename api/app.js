@@ -1,8 +1,9 @@
 "use strict";
-// import
 exports.__esModule = true;
+// import
 var express = require("express"); // using require because of error on vscode
 var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 // Mongoose Init
 mongoose.connect('mongodb://localhost:27017/chaterz');
 var usersSchema = new mongoose.Schema({
@@ -59,6 +60,8 @@ var channelSchema = new mongoose.Schema({
 var channelModel = mongoose.model('channel', channelSchema);
 // Express
 var app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 ;
 var getUsers = function (success) {
     var usernames = [];
@@ -105,8 +108,8 @@ var getChannels = function (enterprise_name, success) {
         success(channelsnames);
     });
 };
-app.get('/signup/:email/:username/:password/', function (request, response) {
-    var data = request.params;
+app.post('/signup/', function (request, response) {
+    var data = request.body;
     var users = getUsers(function (user_response) {
         if (user_response.includes(data.username)) {
             var signedup = false;
@@ -125,8 +128,8 @@ app.get('/signup/:email/:username/:password/', function (request, response) {
         }
     });
 });
-app.get('/login/:username/:password/', function (request, response) {
-    var data = request.params;
+app.post('/login/', function (request, response) {
+    var data = request.body;
     var users = getUsers(function (user_response) {
         if (user_response.includes(data.username)) {
             userModel.find({ username: data.username }, function (error, mongores) {
@@ -152,8 +155,8 @@ app.get('/login/:username/:password/', function (request, response) {
         }
     });
 });
-app.get('/create/enterprise/:name/:author', function (request, response) {
-    var data = request.params;
+app.post('/create/enterprise/', function (request, response) {
+    var data = request.body;
     var enterprises = getEnterprises(function (enterprises_response) {
         if (enterprises_response.includes(data.name)) {
             var created = false;
@@ -180,8 +183,8 @@ app.get('/create/enterprise/:name/:author', function (request, response) {
         }
     });
 });
-app.get('/create/channel/:enterprise/:name/:author', function (request, response) {
-    var data = request.params;
+app.post('/create/channel/', function (request, response) {
+    var data = request.body;
     var enterprises = getEnterprises(function (enterprises_response) {
         if (enterprises_response.includes(data.enterprise)) {
             var users = getUsers(function (users_response) {

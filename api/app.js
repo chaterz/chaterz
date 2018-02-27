@@ -55,9 +55,36 @@ var channelSchema = new mongoose.Schema({
     },
     members: {
         type: []
+    },
+    creationDate: {
+        type: Date,
+        "default": new Date()
     }
 });
 var channelModel = mongoose.model('channels', channelSchema);
+var messageSchema = new mongoose.Schema({
+    user: {
+        type: String,
+        required: true
+    },
+    content: {
+        type: String,
+        required: true
+    },
+    channel: {
+        type: String,
+        required: true
+    },
+    enterprise: {
+        type: String,
+        required: true
+    },
+    creationDate: {
+        type: Date,
+        "default": new Date()
+    }
+});
+var messageModel = mongoose.model('messages', messageSchema);
 // Express
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -237,7 +264,7 @@ app.post('/create/channel/', function (request, response) {
         }
     });
 });
-app.post('/join/channel', function (request, response) {
+app.post('/join/channel/', function (request, response) {
     var data = request.body;
     var users = getUsers(function (users_response) {
         if (users_response.includes(data.user)) {
@@ -264,6 +291,34 @@ app.post('/join/channel', function (request, response) {
             var joined = false;
             var reason = ['User doesnt exist'];
             response.send({ joined: joined, reason: reason });
+        }
+    });
+});
+app.post('/post/message/', function (request, response) {
+    var data = request.body;
+    var users = getUsers(function (users_response) {
+        if (users_response.includes(data.user)) {
+            var channels = getChannels(data.enterprise, function (channels_response) {
+                if (channels_response.includes(data.channel)) {
+                    var message = new messageModel();
+                    message.user = data.user;
+                    message.content = data.content;
+                    message.channel = data.channel;
+                    message.enterprise = data.enterprise;
+                    message.save();
+                    var posted = true;
+                    var reason = ['Message posted'];
+                    response.send({ posted: posted, reason: reason });
+                }
+                else {
+                    var posted = false;
+                    var reason = ['Channel doesnt exist'];
+                }
+            });
+        }
+        else {
+            var posted = false;
+            var reason = ['User doesnt exist'];
         }
     });
 });

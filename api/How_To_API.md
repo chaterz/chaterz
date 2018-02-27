@@ -30,4 +30,8 @@ Post the key **enterprise** with the enterprise name as value / Post the key **n
 
 Post the key **user** with the username of the user who whants to join the channel as value / Post the key **channel** with the channel name as value.
 
-### * Create post (SOON)
+### * Create post
+
+`/post/message`
+
+Post the key **user** with the user name of the user who wants to post the message as value / Post the key **content** with the content of the message as value / Post the key **channel** with the channel name as value / Post the key **enterprise** with the enterprise name as value.

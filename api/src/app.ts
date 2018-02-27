@@ -2,6 +2,7 @@
 import express = require('express'); // using require because of error on vscode
 import * as mongoose from 'mongoose';
 import * as bodyParser from 'body-parser';
+import { request } from 'http';
 
 // Mongoose Init
 mongoose.connect('mongodb://localhost:27017/chaterz');
@@ -59,10 +60,39 @@ const channelSchema: mongoose.Schema = new mongoose.Schema({
     },
     members: {
         type:[],
+    },
+    creationDate: {
+        type:Date,
+        default: new Date()
     }
 });
 
 const channelModel: mongoose.Model<any> = mongoose.model('channels', channelSchema);
+
+const messageSchema: mongoose.Schema = new mongoose.Schema({
+    user: {
+        type:String,
+        required: true
+    },
+    content: {
+        type:String,
+        required: true
+    },
+    channel: {
+        type:String,
+        required: true
+    },
+    enterprise: {
+        type:String,
+        required: true
+    },
+    creationDate: {
+        type:Date,
+        default: new Date()
+    }
+});
+
+const messageModel: mongoose.Model<any> = mongoose.model('messages', messageSchema);
 
 // Express
 const app: any = express();
@@ -232,7 +262,7 @@ app.post('/create/channel/', (request: any, response: any) => {
     });
 });
 
-app.post('/join/channel', (request: any, response: any) => {
+app.post('/join/channel/', (request: any, response: any) => {
     const data: any = request.body;
     let users = getUsers((users_response: any) => {
         if(users_response.includes(data.user)){
@@ -254,6 +284,33 @@ app.post('/join/channel', (request: any, response: any) => {
             const joined: boolean = false;
             const reason: string[] = ['User doesnt exist'];
             response.send({ joined, reason });
+        }
+    });
+});
+
+app.post('/post/message/', (request: any, response: any) => {
+    const data = request.body;
+    let users = getUsers((users_response: any) => {
+        if(users_response.includes(data.user)){
+            let channels = getChannels(data.enterprise, (channels_response: any) => {
+                if(channels_response.includes(data.channel)){
+                    let message = new messageModel();
+                    message.user = data.user;
+                    message.content = data.content;
+                    message.channel = data.channel;
+                    message.enterprise = data.enterprise;
+                    message.save();
+                    const posted: boolean = true;
+                    const reason: string[] = ['Message posted'];
+                    response.send({ posted, reason });
+                } else {
+                    const posted: boolean = false;
+                    const reason: string[] = ['Channel doesnt exist'];
+                }
+            });     
+        } else {
+            const posted: boolean = false;
+            const reason: string[] = ['User doesnt exist'];
         }
     });
 });

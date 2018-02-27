@@ -1,22 +1,22 @@
-# chaterz
+# Chaterz
 Chat app for professionals
 
-What is Chaterz?
+# What is Chaterz?
 It is an opensource chat app for professionals from various fields. For specific features kindly refer the list "Features".
 
-Two main pillars which make it unique
+# Two main pillars which make it unique
 1) Identity verification of users
 2) Protection of privacy of users
 
-Project links
+# Project links
 Discussion room - https://gitter.im/Chat-for-professionals/Lobby
 Mockup - https://chaterz-concept-one.netlify.com
 Trello - https://trello.com/b/Yh5b9pw8/chaterz
 
-Language
+# Language
 Javascript or any based on Javascript
 
-Framework
+# Frameworks
 React | NodeJS - Express
 Well use anyone you like for this project. We will accept any and every framework, library or tools as long as it complies with following broad principles:
 1) Open-source
@@ -24,11 +24,11 @@ Well use anyone you like for this project. We will accept any and every framewor
 3) Widely used
 4) Up to date
 
-Current Choices
+# Current Choices
 Frontend : React
 Backend : NodeJS + Express + MongoDB (mongoose) + PassportJS
 
-Deployment
+# Deployment
 Various options being discussed.
 Requirements
 -Free

@@ -62,7 +62,7 @@ const channelSchema: mongoose.Schema = new mongoose.Schema({
     }
 });
 
-const channelModel: mongoose.Model<any> = mongoose.model('channel', channelSchema);
+const channelModel: mongoose.Model<any> = mongoose.model('channels', channelSchema);
 
 // Express
 const app: any = express();
@@ -109,6 +109,18 @@ const getChannels = (enterprise_name: string, success: Function) => {
             channelsnames.push(mongores[i].name)
         };
         success(channelsnames);
+    });
+};
+
+const getMembers = (channel_name: string, success: Function) => {
+    let membersnames: string[] = [];
+    channelModel.find( { name : channel_name }, (error: any, mongores: any) => {
+        if(error) { throw error };
+        const length: number = mongores.length;
+        for(let i = 0; i < length; i++){
+            membersnames.push(mongores[i].members);
+        };
+        success(membersnames);
     });
 };
 
@@ -195,10 +207,11 @@ app.post('/create/channel/', (request: any, response: any) => {
                             const reason: string[] = ['Channel already exist'];
                             response.send({ created, reason });
                         } else {
-                            let channel = new enterpriseModel();
+                            let channel = new channelModel();
                             channel.name = data.name;
                             channel.author = data.author;
                             channel.enterprise = data.enterprise;
+                            channel.members = [data.author];
                             channel.save();
                             const created: boolean = true;
                             const reason: string[] = ['Channel created'];
@@ -215,6 +228,32 @@ app.post('/create/channel/', (request: any, response: any) => {
             const created: boolean = false;
             const reason: string[] = ['This enterprise doesnt exist'];
             response.send({ created, reason });
+        }
+    });
+});
+
+app.post('/join/channel', (request: any, response: any) => {
+    const data: any = request.body;
+    let users = getUsers((users_response: any) => {
+        if(users_response.includes(data.user)){
+            let members = getMembers(data.channel, (members_response: any) => {
+                if(members_response.includes(data.user)) {
+                    const joined: boolean = false;
+                    const reason: string[] = ['This user already joined this channel']
+                } else {
+                    const new_members: string[] = members_response.push(data.user);
+                    channelModel.update({ name : data.channel }, { members : new_members }, (error) => {
+                        if(error) { throw error };
+                        const joined: boolean = true;
+                        const reason: string[] = ['User joined this channel'];
+                        response.send({ joined, reason });
+                    });
+                }
+            });
+        } else {
+            const joined: boolean = false;
+            const reason: string[] = ['User doesnt exist'];
+            response.send({ joined, reason });
         }
     });
 });

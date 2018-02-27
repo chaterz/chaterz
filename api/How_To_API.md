@@ -20,8 +20,14 @@ Post the key **name** with the enterprise name as value / Post the key **author*
 
 ### * Create Channel
 
-`/create/channel/enterprise/`
+`/create/channel/`
 
 Post the key **enterprise** with the enterprise name as value / Post the key **name** with the channel name as value / Post the key **author** with the user name of the user who wants to create this channel as value.
+
+### * Join Channel
+
+`/join/channel`
+
+Post the key **user** with the username of the user who whants to join the channel as value / Post the key **channel** with the channel name as value.
 
 ### * Create post (SOON)

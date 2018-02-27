@@ -57,7 +57,7 @@ var channelSchema = new mongoose.Schema({
         type: []
     }
 });
-var channelModel = mongoose.model('channel', channelSchema);
+var channelModel = mongoose.model('channels', channelSchema);
 // Express
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -106,6 +106,21 @@ var getChannels = function (enterprise_name, success) {
         }
         ;
         success(channelsnames);
+    });
+};
+var getMembers = function (channel_name, success) {
+    var membersnames = [];
+    channelModel.find({ name: channel_name }, function (error, mongores) {
+        if (error) {
+            throw error;
+        }
+        ;
+        var length = mongores.length;
+        for (var i = 0; i < length; i++) {
+            membersnames.push(mongores[i].members);
+        }
+        ;
+        success(membersnames);
     });
 };
 app.post('/signup/', function (request, response) {
@@ -196,10 +211,11 @@ app.post('/create/channel/', function (request, response) {
                             response.send({ created: created, reason: reason });
                         }
                         else {
-                            var channel = new enterpriseModel();
+                            var channel = new channelModel();
                             channel.name = data.name;
                             channel.author = data.author;
                             channel.enterprise = data.enterprise;
+                            channel.members = [data.author];
                             channel.save();
                             var created = true;
                             var reason = ['Channel created'];
@@ -218,6 +234,36 @@ app.post('/create/channel/', function (request, response) {
             var created = false;
             var reason = ['This enterprise doesnt exist'];
             response.send({ created: created, reason: reason });
+        }
+    });
+});
+app.post('/join/channel', function (request, response) {
+    var data = request.body;
+    var users = getUsers(function (users_response) {
+        if (users_response.includes(data.user)) {
+            var members = getMembers(data.channel, function (members_response) {
+                if (members_response.includes(data.user)) {
+                    var joined = false;
+                    var reason = ['This user already joined this channel'];
+                }
+                else {
+                    var new_members = members_response.push(data.user);
+                    channelModel.update({ name: data.channel }, { members: new_members }, function (error) {
+                        if (error) {
+                            throw error;
+                        }
+                        ;
+                        var joined = true;
+                        var reason = ['User joined this channel'];
+                        response.send({ joined: joined, reason: reason });
+                    });
+                }
+            });
+        }
+        else {
+            var joined = false;
+            var reason = ['User doesnt exist'];
+            response.send({ joined: joined, reason: reason });
         }
     });
 });

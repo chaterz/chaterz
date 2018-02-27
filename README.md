@@ -17,7 +17,7 @@ Trello - https://trello.com/b/Yh5b9pw8/chaterz
 Javascript or any based on Javascript
 
 # Frameworks
-React | NodeJS - Express
+React | NodeJS - Express - MongoDB(mongoose)
 Well use anyone you like for this project. We will accept any and every framework, library or tools as long as it complies with following broad principles:
 1) Open-source
 2) Good documentation
@@ -26,7 +26,7 @@ Well use anyone you like for this project. We will accept any and every framewor
 
 # Current Choices
 Frontend : React
-Backend : NodeJS + Express + MongoDB (mongoose) + PassportJS
+Backend : NodeJS + Express + MongoDB (mongoose)
 
 # Deployment
 Various options being discussed.

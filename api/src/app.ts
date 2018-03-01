@@ -315,4 +315,45 @@ app.post('/post/message/', (request: any, response: any) => {
     });
 });
 
+app.get('/get/enterprises/', (request: {}, response: { send: Function }) => {
+    let enterprises = getEnterprises((enterprises_response: string[]) => {
+        response.send(enterprises_response);
+    });
+});
+
+app.get('/get/channels/:enterprise', (request: { params: { enterprise: string } }, response: { send: Function }) => {
+    const data: { enterprise: string } = request.params;
+    let enterprises = getEnterprises((enterprises_response: any) => {
+        if(enterprises_response.includes(data.enterprise)) {
+            let channels = getChannels(data.enterprise, (channels_response: string[]) => {
+                response.send(channels_response);
+            });
+        } else {
+            const error: string[] = ['Enterprise doesnt exist'];
+            response.send({error});
+        }
+    });
+});
+
+app.get('/get/members/:enterprise/:channel', (request: { params: { enterprise: string, channel: string } }, response: { send: Function }) => {
+    const data: { enterprise: string, channel: string } = request.params;
+    let enterprises = getEnterprises((enterprises_response: any) => {
+        if(enterprises_response.includes(data.enterprise)) {
+            let channels = getChannels(data.enterprise, (channels_response: any) => {
+                if(channels_response.includes(data.channel)){
+                    let members = getMembers(data.channel, (members_response: string[]) => {
+                        response.send(members_response);
+                    });
+                } else {
+                    const error: string[] = ['Channel doesnt exist'];
+                    response.send({error});
+                }
+            });
+        } else {
+            const error: string[] = ['Enterprise doesnt exist'];
+            response.send({error});
+        }
+    });
+});
+
 app.listen(4000);

@@ -322,4 +322,45 @@ app.post('/post/message/', function (request, response) {
         }
     });
 });
+app.get('/get/enterprises/', function (request, response) {
+    var enterprises = getEnterprises(function (enterprises_response) {
+        response.send(enterprises_response);
+    });
+});
+app.get('/get/channel/:enterprise', function (request, response) {
+    var data = request.params;
+    var enterprises = getEnterprises(function (enterprises_response) {
+        if (enterprises_response.includes(data.enterprise)) {
+            var channels = getChannels(data.enterprise, function (channels_response) {
+                response.send(channels_response);
+            });
+        }
+        else {
+            var error = ['Enterprise doesnt exist'];
+            response.send({ error: error });
+        }
+    });
+});
+app.get('/get/members/:enterprise/:channel', function (request, response) {
+    var data = request.params;
+    var enterprises = getEnterprises(function (enterprises_response) {
+        if (enterprises_response.includes(data.enterprise)) {
+            var channels = getChannels(data.enterprise, function (channels_response) {
+                if (channels_response.includes(data.channel)) {
+                    var members = getMembers(data.channel, function (members_response) {
+                        response.send(members_response);
+                    });
+                }
+                else {
+                    var error = ['Channel doesnt exist'];
+                    response.send({ error: error });
+                }
+            });
+        }
+        else {
+            var error = ['Enterprise doesnt exist'];
+            response.send({ error: error });
+        }
+    });
+});
 app.listen(4000);

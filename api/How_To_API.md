@@ -30,7 +30,7 @@ Post the key **enterprise** with the enterprise name as value / Post the key **n
 
 Post the key **user** with the username of the user who whants to join the channel as value / Post the key **channel** with the channel name as value.
 
-### * Create Post
+### * Create Message
 
 `/post/message/`
 
@@ -53,5 +53,11 @@ Will return the lists of channels
 ### * Get Members
 
 `/get/members/:enterprise/:channel`
+
+Replace **:enterprise** with the enterprise name / Replace **:channel** with the channel name
+
+### * Get Messages
+
+`/get/messages/:enterprise/:channel`
 
 Replace **:enterprise** with the enterprise name / Replace **:channel** with the channel name

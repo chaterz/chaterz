@@ -327,7 +327,7 @@ app.get('/get/enterprises/', function (request, response) {
         response.send(enterprises_response);
     });
 });
-app.get('/get/channel/:enterprise', function (request, response) {
+app.get('/get/channels/:enterprise', function (request, response) {
     var data = request.params;
     var enterprises = getEnterprises(function (enterprises_response) {
         if (enterprises_response.includes(data.enterprise)) {
@@ -349,6 +349,28 @@ app.get('/get/members/:enterprise/:channel', function (request, response) {
                 if (channels_response.includes(data.channel)) {
                     var members = getMembers(data.channel, function (members_response) {
                         response.send(members_response);
+                    });
+                }
+                else {
+                    var error = ['Channel doesnt exist'];
+                    response.send({ error: error });
+                }
+            });
+        }
+        else {
+            var error = ['Enterprise doesnt exist'];
+            response.send({ error: error });
+        }
+    });
+});
+app.get('/get/messages/:enterprise/:channel', function (request, response) {
+    var data = request.params;
+    var enterprises = getEnterprises(function (enterprises_response) {
+        if (enterprises_response.includes(data.enterprise)) {
+            var channels = getChannels(data.enterprise, function (channels_response) {
+                if (channels_response.includes(data.channel)) {
+                    messageModel.find({ enterprise: data.enterprise, channel: data.channel }, function (err, mongores) {
+                        response.send(mongores);
                     });
                 }
                 else {

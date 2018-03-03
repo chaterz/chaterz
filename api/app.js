@@ -385,4 +385,4 @@ app.get('/get/messages/:enterprise/:channel', function (request, response) {
         }
     });
 });
-app.listen(4000);
+app.listen(process.env.PORT || 4000);

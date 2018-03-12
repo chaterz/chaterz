@@ -12,6 +12,7 @@ It is an opensource chat app for professionals from various fields. For specific
 Discussion room - https://gitter.im/Chat-for-professionals/Lobby
 Mockup - https://chaterz-concept-one.netlify.com
 Trello - https://trello.com/b/Yh5b9pw8/chaterz
+Website - https://chaterz.github.io
 
 # Language
 Javascript or any based on Javascript
@@ -34,3 +35,4 @@ Requirements
 -Free
 Possibles
 - Heroku
+- Github pages

@@ -23,7 +23,7 @@
     "@types/mongoose": "^5.0.4",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "mongoose": "^5.0.7",
+    "mongoose": "^5.7.5",
     "requirejs": "^2.3.5"
   }
 }
